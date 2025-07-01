@@ -94,36 +94,13 @@ const ValueEstimation: React.FC<ValueEstimationProps> = ({ landData }) => {
       </div>
 
 
-        {/* Nearby Facilities */}
-   <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-  <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">🏢 Tiện ích xung quanh</h3>
-  <div className="grid md:grid-cols-2 gap-3">
-    {landData.nearby_facilities.map((facility, index) => (
-      <div
-        key={index}
-        className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg min-h-[67px]"
-      >
-        <span className="text-xl">
-          {facility.includes('Trường') ? '🏫' :
-           facility.includes('Bệnh viện') ? '🏥' :
-           facility.includes('Chợ') ? '🏪' :
-           facility.includes('Ngân hàng') ? '🏦' :
-           facility.includes('Sân bay') ? '✈️' :
-           facility.includes('Siêu thị') ? '🛒' :
-           facility.includes('Công viên') ? '🌳' :
-           facility.includes('Nhà thờ') ? '⛪' : '📍'}
-        </span>
-        <span className="text-gray-700">{facility}</span>
-      </div>
-    ))}
-  </div>
-</div>
+
 
       {/* Recent Transactions */}
-      {/* <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
         <h3 className="text-xl font-semibold text-gray-800 mb-4">🏘️ Giao dịch gần đây</h3>
         <TransactionList transactions={landData.recent_transactions} />
-      </div> */}
+      </div>
     </div>
   );
 };

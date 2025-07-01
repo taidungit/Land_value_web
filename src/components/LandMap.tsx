@@ -1,4 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap, Polygon } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+
+// ✅ Sửa lỗi không hiển thị marker trong Vite
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+});
 
 interface LandMapProps {
   location: {
@@ -8,44 +22,67 @@ interface LandMapProps {
   address: string;
 }
 
-const LandMap: React.FC<LandMapProps> = ({ location, address }) => {
+const TileLayerToggle: React.FC<{ isSatellite: boolean }> = ({ isSatellite }) => {
+  useMap(); // Đảm bảo tile layer áp dụng
   return (
-    <div className="relative">
-      {/* Placeholder map */}
-      <div className="w-full h-64 sm:h-72 bg-gradient-to-br from-green-100 to-blue-100 rounded-lg border-2 border-gray-200 relative overflow-hidden">
-        {/* Mock map background */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="grid grid-cols-8 grid-rows-6 h-full">
-            {Array.from({ length: 48 }).map((_, i) => (
-              <div key={i} className="border border-gray-300"></div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Center marker */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="relative">
-            <div className="w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow-lg animate-pulse"></div>
-            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-red-500 rotate-45"></div>
-          </div>
-        </div>
+    <TileLayer
+      attribution='&copy; OpenStreetMap & Esri'
+      url={
+        isSatellite
+          ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      }
+    />
+  );
+};
 
-        {/* Mock roads */}
-        <div className="absolute top-0 left-1/3 w-1 h-full bg-gray-400 opacity-50"></div>
-        <div className="absolute top-0 right-1/3 w-1 h-full bg-gray-400 opacity-50"></div>
-        <div className="absolute top-1/3 left-0 w-full h-1 bg-gray-400 opacity-50"></div>
-        <div className="absolute bottom-1/3 left-0 w-full h-1 bg-gray-400 opacity-50"></div>
+const LandMap: React.FC<LandMapProps> = ({ location, address }) => {
+  const [isSatellite, setIsSatellite] = useState(false);
 
-        {/* Coordinates overlay */}
-        <div className="absolute bottom-4 right-4 bg-white bg-opacity-90 p-2 rounded-lg shadow-md">
-          <p className="text-xs text-gray-600">
+  // 🟧 Toạ độ mô phỏng polygon (vuông quanh điểm center)
+  const polygonCoords: [number, number][] = [
+    [location.lat + 0.0004, location.lng - 0.0004],
+    [location.lat + 0.0004, location.lng + 0.0004],
+    [location.lat - 0.0004, location.lng + 0.0004],
+    [location.lat - 0.0004, location.lng - 0.0004],
+  ];
+
+  return (
+    <div className="relative rounded-lg overflow-hidden shadow-md border border-gray-200">
+      <MapContainer
+        center={[location.lat, location.lng] as [number, number]}
+        zoom={18}
+        scrollWheelZoom={false}
+        style={{ height: '300px', width: '100%' }}
+      >
+        <TileLayerToggle isSatellite={isSatellite} />
+
+        {/* Marker */}
+        <Marker position={[location.lat, location.lng]}>
+          <Popup>
+            {address}
+            <br />
             📍 {location.lat.toFixed(3)}, {location.lng.toFixed(3)}
-          </p>
-        </div>
-      </div>
+          </Popup>
+        </Marker>
 
-      {/* Map info */}
-      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+        {/* Polygon */}
+        <Polygon
+          positions={polygonCoords}
+          pathOptions={{ color: 'blue', fillColor: '#3b82f6', fillOpacity: 0.2 }}
+        />
+      </MapContainer>
+
+      {/* Nút chuyển bản đồ */}
+      <button
+        onClick={() => setIsSatellite(!isSatellite)}
+        className="absolute top-4 right-4 z-[1000] px-3 py-1.5 text-sm bg-white border border-gray-300 rounded shadow hover:bg-gray-100 transition"
+      >
+        {isSatellite ? '🗺️ Bản đồ thường' : '🛰️ Vệ tinh'}
+      </button>
+
+      {/* Mô tả */}
+      <div className="p-4 bg-gray-50">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-red-500 text-xl">📍</span>
           <span className="font-semibold text-gray-700">Vị trí:</span>
@@ -54,13 +91,6 @@ const LandMap: React.FC<LandMapProps> = ({ location, address }) => {
         <p className="text-sm text-gray-500 ml-6 mt-1">
           Tọa độ: {location.lat}°N, {location.lng}°E
         </p>
-      </div>
-
-      {/* Mock satellite view toggle */}
-      <div className="absolute top-4 right-4 bg-white rounded-lg shadow-md">
-        <button className="px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
-          🛰️ Vệ tinh
-        </button>
       </div>
     </div>
   );

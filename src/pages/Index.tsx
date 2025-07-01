@@ -5,6 +5,7 @@ import ValueEstimation from '../components/ValueEstimation';
 import { LandData } from '../types/LandData';
 import { mockLandData } from '../data/mockData';
 import TransactionList from '@/components/TransactionList';
+import 'leaflet/dist/leaflet.css';
 
 const Index = () => {
   const [landData, setLandData] = useState<LandData | null>(null);
@@ -90,10 +91,10 @@ const Index = () => {
               </div>
             </div>
                     {/* Recent Transactions */}
-      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      {/* <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
         <h3 className="text-xl font-semibold text-gray-800 mb-4">🏘️ Giao dịch gần đây</h3>
         <TransactionList transactions={landData.recent_transactions} />
-      </div>
+      </div> */}
           </>
           
         )}

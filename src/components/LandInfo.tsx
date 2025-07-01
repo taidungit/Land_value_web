@@ -21,7 +21,7 @@ const LandInfo: React.FC<LandInfoProps> = ({ landData }) => {
   };
 
   return (
-    <div className="space-y-6 h-full flex flex-col">
+    <div className="space-y-6 h-full flex flex-col flex-1">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 rounded-xl shadow-lg">
         <h2 className="text-2xl font-bold mb-2">🧱 Thông tin lô đất</h2>
@@ -31,7 +31,7 @@ const LandInfo: React.FC<LandInfoProps> = ({ landData }) => {
       {/* Basic Info */}
       <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 min-h-[351px] flex flex-col justify-center">
         <h3 className="text-xl font-semibold text-gray-800 mb-4">📋 Thông tin cơ bản</h3>
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-[1fr_1.2fr] gap-4">
           <div className="space-y-3">
             <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
               <span className="font-medium text-gray-700">Diện tích:</span>
@@ -56,7 +56,7 @@ const LandInfo: React.FC<LandInfoProps> = ({ landData }) => {
               <span className="text-blue-600 font-semibold">{landData.land_type}</span>
             </div>
             <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-              <span className="font-medium text-gray-700">Tình trạng pháp lý:</span>
+              <span className="font-medium text-gray-700">Tình trạng:</span>
               <span className={`font-semibold ${
                 landData.legal_status.includes('đầy đủ') ? 'text-green-600' : 'text-orange-600'
               }`}>
@@ -66,7 +66,6 @@ const LandInfo: React.FC<LandInfoProps> = ({ landData }) => {
           </div>
         </div>
       </div>
- 
 
       {/* Map */}
       <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
@@ -76,7 +75,7 @@ const LandInfo: React.FC<LandInfoProps> = ({ landData }) => {
 
       {/* Inferred Info */}
       <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">🔍 Thông tin suy diễn</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">🔍 Phân tích tiềm năng </h3>
         <div className="space-y-4">
           <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
             <div className="flex items-center gap-3 mb-2">
@@ -114,7 +113,7 @@ const LandInfo: React.FC<LandInfoProps> = ({ landData }) => {
       </div>
 
       {/* Nearby Facilities */}
-      {/* <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
         <h3 className="text-xl font-semibold text-gray-800 mb-4">🏢 Tiện ích xung quanh</h3>
         <div className="grid md:grid-cols-2 gap-3">
           {landData.nearby_facilities.map((facility, index) => (
@@ -133,7 +132,7 @@ const LandInfo: React.FC<LandInfoProps> = ({ landData }) => {
             </div>
           ))}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
